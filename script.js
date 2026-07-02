@@ -1,19 +1,48 @@
-/* Leger Family Chiropractic Care — redesign concept
-   Vanilla JS: sticky header, mobile nav, scroll-reveal, demo form. */
+/* Leger Chiropractic — redesign concept
+   Vanilla JS: shrink-on-scroll header, mobile nav, scroll-reveal,
+   graceful photo fallbacks, demo appointment form. No dependencies. */
 (function () {
   "use strict";
 
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var header = document.querySelector(".site-header");
   var navToggle = document.querySelector(".nav-toggle");
   var navList = document.getElementById("nav-list");
 
-  /* ---- Sticky / shrinking header ---- */
-  var lastKnown = 0, ticking = false;
+  /* ---- Graceful photo fallbacks ----
+     Photos live in assets/photos/ and are dropped in later. Until then the
+     files 404; mark their frames "empty" so the designed placeholder shows. */
+  document.querySelectorAll("[data-photo] img").forEach(function (img) {
+    function markEmpty() {
+      var wrap = img.closest("[data-photo]");
+      if (wrap) {
+        wrap.classList.add(
+          wrap.classList.contains("portrait-frame") ? "portrait-empty" : "media-empty"
+        );
+      }
+      img.style.display = "none";
+    }
+    if (img.complete && img.naturalWidth === 0) markEmpty();
+    img.addEventListener("error", markEmpty);
+  });
+  // portrait frame is one level up from [data-photo]; normalize it
+  document.querySelectorAll(".hero-portrait img").forEach(function (img) {
+    img.addEventListener("error", function () {
+      var frame = img.closest(".portrait-frame");
+      if (frame) frame.classList.add("portrait-empty");
+    });
+    if (img.complete && img.naturalWidth === 0) {
+      var frame = img.closest(".portrait-frame");
+      if (frame) frame.classList.add("portrait-empty");
+    }
+  });
+
+  /* ---- Shrink-on-scroll header ---- */
+  var ticking = false;
   function onScroll() {
-    lastKnown = window.scrollY;
     if (!ticking) {
       window.requestAnimationFrame(function () {
-        header.classList.toggle("scrolled", lastKnown > 12);
+        header.classList.toggle("scrolled", window.scrollY > 12);
         ticking = false;
       });
       ticking = true;
@@ -45,8 +74,7 @@
     });
   }
 
-  /* ---- Scroll reveal ---- */
-  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  /* ---- Scroll reveal (with staggered cascade) ---- */
   var revealables = document.querySelectorAll(".reveal");
   if (reduce || !("IntersectionObserver" in window)) {
     revealables.forEach(function (el) { el.classList.add("in"); });
@@ -59,19 +87,12 @@
         }
       });
     }, { threshold: 0.12, rootMargin: "0px 0px -60px 0px" });
+    revealables.forEach(function (el) { io.observe(el); });
 
-    // Stagger siblings inside a grid for a nicer cascade.
-    var groups = {};
-    revealables.forEach(function (el) {
-      var parent = el.parentElement;
-      var key = parent ? (groups[parent.className] = parent) : null;
-      io.observe(el);
-    });
-    // Apply small transition delays to grouped items.
-    document.querySelectorAll(".service-grid, .value-grid, .test-grid").forEach(function (grid) {
-      Array.prototype.forEach.call(grid.children, function (child, i) {
-        if (child.classList.contains("reveal")) {
-          child.style.transitionDelay = (i % 4) * 0.08 + "s";
+    document.querySelectorAll(".care-rows, .phase-track, .timeline, .hero-copy").forEach(function (group) {
+      Array.prototype.forEach.call(group.children, function (child, i) {
+        if (child.classList && child.classList.contains("reveal")) {
+          child.style.transitionDelay = (i % 5) * 0.07 + "s";
         }
       });
     });

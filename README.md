@@ -1,25 +1,36 @@
-# Leger Family Chiropractic Care — website redesign concept
+# Leger Chiropractic — website redesign concept
 
-A modern, single-page website concept for **Leger Family Chiropractic Care** (Dr. James W. Leger, D.C.) in Prairieville, Louisiana. Built as an unsolicited design demo to show what a refreshed, 2026-ready site could look like.
+A modern, single-page website concept for **Leger Chiropractic** — Dr. James Leger, D.C., in Prairieville, Louisiana. Built as an unsolicited design demo to show what a refreshed, 2026-ready site could look like.
 
 ## Why a redesign
 
-The current website reads as abandoned rather than actively run:
+The current site ([legerchiropractic.com](https://www.legerchiropractic.com/)) is a frozen ChiroMatrix template that reads as abandoned rather than actively run:
 
-- It still displays a **Google+ icon** — a service Google shut down in 2019.
-- A **dated image carousel** and **stock spine photography** date the site to roughly 2017.
-- The **logo is pixelated** and the layout uses a frozen template style.
+- A **dated image carousel** and generic **demo stock photography** date the look to roughly 2017.
+- Content is **thin and templated** — the "testimonials" even reference a "Dr. Anderson," not Dr. Leger, a leftover from the template.
+- No real photos of the doctor or office; a **pixelated logo banner** stands in.
+- The layout is a stock frozen template with no clear conversion path.
 
-For a welcoming, family-focused practice that's actively taking new patients, the site undersells the care behind the door. This concept fixes that.
+For a welcoming, family-focused practice actively taking new patients (with a *free* first consultation), the site badly undersells the care behind the door. This concept fixes that.
 
-## What this concept does
+## What this concept does — an objective upgrade
 
-- Warm, calming healthcare brand: deep teal/forest green, warm cream, and a vibrant wellness-gold accent.
-- Clear services: adjustments, back/neck pain relief, spinal wellness, auto-injury/whiplash, family care, and massage/therapy.
-- A prominent **"Request an appointment"** form (name, phone, email, reason, new/existing patient) and a **New Patient** welcome section — the practice's key conversion moments.
-- Click-to-call the real office number, **(225) 313-6996**, in the header, hero, and contact section.
-- Patient testimonials (clearly illustrative), office hours, and location.
-- Responsive and mobile-first, with tasteful motion, scroll reveals, and accessible, semantic markup.
+- **Warm clinical editorial** brand: deep pine green, warm sand/bone paper, and a terracotta-clay accent — calm, trustworthy, and distinctly *not* the old template.
+- **Varied, editorial layouts** rather than a grid of look-alike cards: an asymmetric hero with a real-photo frame, numbered editorial "what we help with" rows, a split techniques band, a real 7-step first-visit **timeline**, and a 3-phase care progression.
+- **All real practice data**, pulled from their live site:
+  - Real services: back/neck pain, headaches, muscular tightness, spinal conditions, family & pediatric care.
+  - The **actual first-visit process** (welcome → consultation → exam → X-rays → report of findings → treatment → wellness plan).
+  - The **three phases of care** (Relief → Corrective → Wellness).
+  - The **three real techniques** (Diversified, Gonstead, Activator).
+  - **Real office hours**, address (17540 Airline Hwy, Ste F), and the **free new-patient consultation** offer.
+  - Dr. Leger's real credential: Cleveland Chiropractic College, 1999; 25+ years serving Ascension Parish.
+- **Money feature:** a real **"Request an appointment"** form (name, phone, email, reason, new/existing) plus **click-to-call** the real office number, **(225) 313-6996**, in the header, hero, contact, and CTA band.
+- **Polished motion:** shrink-on-scroll header with animated nav underlines, a real mobile menu, and `IntersectionObserver` scroll reveals — all respecting `prefers-reduced-motion`.
+- Responsive and mobile-first (360px → widescreen), accessible and semantic.
+
+## Photos
+
+The live site ships only generic template stock — **no real photo of Dr. Leger or the office could be pulled**. Those slots use a tasteful designed placeholder (marked `<!-- IMG-NEEDED -->`) and are wired to show real images the moment they're added. See **`assets/photos/DROP-PHOTOS-HERE.md`** — drop in `doctor.jpg`, `office.jpg`, and `adjustment.jpg` and they appear automatically.
 
 ## How to view
 
@@ -27,8 +38,8 @@ Open `index.html` in any modern browser (double-click it) — no build step, no 
 
 ## Tech
 
-Plain HTML, CSS, and vanilla JavaScript. Inline SVG icons and CSS gradients only — no external images, frameworks, or CDNs (one optional Google Fonts link).
+Plain HTML, CSS, and vanilla JavaScript. Inline SVG and CSS gradients only — no external images, frameworks, or CDNs (one optional Google Fonts link).
 
 ---
 
-*Unsolicited redesign concept prepared as a pitch. Business name, address, and phone are real; testimonials and office hours are illustrative and should be confirmed by the practice.*
+*Unsolicited redesign concept prepared as a pitch. Business name, address, phone, hours, services, and credentials are real, pulled from the practice's public site. It is not the practice's official website.*
