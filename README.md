@@ -32,6 +32,12 @@ For a welcoming, family-focused practice actively taking new patients (with a *f
 
 The live site ships only generic template stock — **no real photo of Dr. Leger or the office could be pulled**. Those slots use a tasteful designed placeholder (marked `<!-- IMG-NEEDED -->`) and are wired to show real images the moment they're added. See **`assets/photos/DROP-PHOTOS-HERE.md`** — drop in `doctor.jpg`, `office.jpg`, and `adjustment.jpg` and they appear automatically.
 
+## SEO / deployment note
+
+On-page SEO is built in: a unique title + meta description, `Chiropractic` (MedicalBusiness) **JSON-LD** structured data with the practice's real name, phone, address, hours, `areaServed`, and `sameAs`, full **Open Graph + Twitter** card tags, a `<link rel="canonical">`, plus `robots.txt` and `sitemap.xml` at the repo root.
+
+All absolute URLs (canonical, `og:url`, schema `url`/`image`, and the sitemap/robots entries) use the literal placeholder **`https://REPLACE-WITH-DOMAIN.com/`**. Before deploying, do a one-line find-and-replace of `https://REPLACE-WITH-DOMAIN.com/` across `index.html`, `robots.txt`, and `sitemap.xml` with the site's real domain.
+
 ## How to view
 
 Open `index.html` in any modern browser (double-click it) — no build step, no dependencies, works offline.
