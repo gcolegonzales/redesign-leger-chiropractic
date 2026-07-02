@@ -36,7 +36,7 @@ The live site ships only generic template stock — **no real photo of Dr. Leger
 
 On-page SEO is built in: a unique title + meta description, `Chiropractic` (MedicalBusiness) **JSON-LD** structured data with the practice's real name, phone, address, hours, `areaServed`, and `sameAs`, full **Open Graph + Twitter** card tags, a `<link rel="canonical">`, plus `robots.txt` and `sitemap.xml` at the repo root.
 
-All absolute URLs (canonical, `og:url`, schema `url`/`image`, and the sitemap/robots entries) use the literal placeholder **`https://REPLACE-WITH-DOMAIN.com/`**. Before deploying, do a one-line find-and-replace of `https://REPLACE-WITH-DOMAIN.com/` across `index.html`, `robots.txt`, and `sitemap.xml` with the site's real domain.
+All absolute URLs (canonical, `og:url`, schema `url`/`image`, and the sitemap/robots entries) use the literal placeholder **`https://legerchiropractic.com/`**. Before deploying, do a one-line find-and-replace of `https://legerchiropractic.com/` across `index.html`, `robots.txt`, and `sitemap.xml` with the site's real domain.
 
 ## How to view
 
