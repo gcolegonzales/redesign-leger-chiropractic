@@ -37,12 +37,25 @@
     }
   });
 
-  /* ---- Shrink-on-scroll header ---- */
+  /* ---- Header: shrink + hide-on-scroll-down / reveal-on-any-scroll-up ---- */
   var ticking = false;
+  var lastY = window.scrollY || 0;
   function onScroll() {
     if (!ticking) {
       window.requestAnimationFrame(function () {
-        header.classList.toggle("scrolled", window.scrollY > 12);
+        var y = window.scrollY || 0;
+        header.classList.toggle("scrolled", y > 12);
+        // Never hide while the mobile menu is open.
+        if (navList && navList.classList.contains("open")) {
+          header.classList.remove("nav-hidden");
+        } else if (y > lastY && y > 140) {
+          // scrolling down, past the header zone -> hide
+          header.classList.add("nav-hidden");
+        } else if (y < lastY) {
+          // ANY upward movement -> reveal immediately
+          header.classList.remove("nav-hidden");
+        }
+        lastY = y;
         ticking = false;
       });
       ticking = true;
@@ -51,21 +64,44 @@
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 
-  /* ---- Mobile nav ---- */
+  /* ---- Mobile nav (dropdown + scrim) ---- */
+  // Build a scrim element that sits behind the dropdown and closes it on tap.
+  var scrim = document.createElement("div");
+  scrim.className = "nav-scrim";
+  scrim.setAttribute("hidden", "");
+  document.body.appendChild(scrim);
+
+  function openNav() {
+    navList.classList.add("open");
+    scrim.removeAttribute("hidden");
+    // force reflow so the transition runs
+    void scrim.offsetWidth;
+    scrim.classList.add("show");
+    header.classList.remove("nav-hidden");
+    navToggle.setAttribute("aria-expanded", "true");
+    navToggle.setAttribute("aria-label", "Close menu");
+    document.body.classList.add("nav-open");
+  }
   function closeNav() {
     navList.classList.remove("open");
+    scrim.classList.remove("show");
     navToggle.setAttribute("aria-expanded", "false");
     navToggle.setAttribute("aria-label", "Open menu");
+    document.body.classList.remove("nav-open");
+    var hide = function () { scrim.setAttribute("hidden", ""); scrim.removeEventListener("transitionend", hide); };
+    scrim.addEventListener("transitionend", hide);
+    // fallback in case transitionend doesn't fire
+    setTimeout(function () { if (!scrim.classList.contains("show")) scrim.setAttribute("hidden", ""); }, 350);
   }
   if (navToggle && navList) {
     navToggle.addEventListener("click", function () {
-      var open = navList.classList.toggle("open");
-      navToggle.setAttribute("aria-expanded", String(open));
-      navToggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      if (navList.classList.contains("open")) closeNav();
+      else openNav();
     });
     navList.addEventListener("click", function (e) {
       if (e.target.closest("a")) closeNav();
     });
+    scrim.addEventListener("click", closeNav);
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape" && navList.classList.contains("open")) {
         closeNav();
