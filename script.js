@@ -71,6 +71,25 @@
   scrim.setAttribute("hidden", "");
   document.body.appendChild(scrim);
 
+  // Elements to mark inert/aria-hidden while the drawer is open (everything but the header).
+  var inertTargets = [document.getElementById("main")];
+  var footerEl = document.querySelector("footer");
+  if (footerEl) inertTargets.push(footerEl);
+
+  function focusableInDrawer() {
+    return Array.prototype.filter.call(
+      navList.querySelectorAll('a[href], button:not([disabled])'),
+      function (el) { return el.offsetParent !== null || el.getClientRects().length; }
+    );
+  }
+  function setBackgroundInert(on) {
+    inertTargets.forEach(function (el) {
+      if (!el) return;
+      if (on) { el.setAttribute("inert", ""); el.setAttribute("aria-hidden", "true"); }
+      else { el.removeAttribute("inert"); el.removeAttribute("aria-hidden"); }
+    });
+  }
+
   function openNav() {
     navList.classList.add("open");
     scrim.removeAttribute("hidden");
@@ -81,13 +100,19 @@
     navToggle.setAttribute("aria-expanded", "true");
     navToggle.setAttribute("aria-label", "Close menu");
     document.body.classList.add("nav-open");
+    setBackgroundInert(true);
+    // Move focus into the drawer (first link).
+    var items = focusableInDrawer();
+    if (items.length) items[0].focus();
   }
-  function closeNav() {
+  function closeNav(returnFocus) {
     navList.classList.remove("open");
     scrim.classList.remove("show");
     navToggle.setAttribute("aria-expanded", "false");
     navToggle.setAttribute("aria-label", "Open menu");
     document.body.classList.remove("nav-open");
+    setBackgroundInert(false);
+    if (returnFocus) navToggle.focus();
     var hide = function () { scrim.setAttribute("hidden", ""); scrim.removeEventListener("transitionend", hide); };
     scrim.addEventListener("transitionend", hide);
     // fallback in case transitionend doesn't fire
@@ -95,18 +120,34 @@
   }
   if (navToggle && navList) {
     navToggle.addEventListener("click", function () {
-      if (navList.classList.contains("open")) closeNav();
+      if (navList.classList.contains("open")) closeNav(true);
       else openNav();
     });
     navList.addEventListener("click", function (e) {
-      if (e.target.closest("a")) closeNav();
+      if (e.target.closest("a")) closeNav(false);
     });
-    scrim.addEventListener("click", closeNav);
+    scrim.addEventListener("click", function () { closeNav(true); });
     document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && navList.classList.contains("open")) {
-        closeNav();
-        navToggle.focus();
+      if (!navList.classList.contains("open")) return;
+      if (e.key === "Escape") {
+        closeNav(true);
+      } else if (e.key === "Tab") {
+        // Trap focus within the drawer (+ toggle button).
+        var items = focusableInDrawer();
+        items.unshift(navToggle);
+        if (!items.length) return;
+        var first = items[0], last = items[items.length - 1];
+        var active = document.activeElement;
+        if (e.shiftKey && (active === first || !navList.contains(active) && active !== navToggle)) {
+          e.preventDefault(); last.focus();
+        } else if (!e.shiftKey && active === last) {
+          e.preventDefault(); first.focus();
+        }
       }
+    });
+    // Reset drawer + toggle state when crossing the desktop breakpoint.
+    window.matchMedia("(min-width: 761px)").addEventListener("change", function (ev) {
+      if (ev.matches && navList.classList.contains("open")) closeNav(false);
     });
   }
 
