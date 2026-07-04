@@ -101,9 +101,10 @@
     navToggle.setAttribute("aria-label", "Close menu");
     document.body.classList.add("nav-open");
     setBackgroundInert(true);
-    // Move focus into the drawer (first link).
+    // Move focus into the drawer (first link) WITHOUT scrolling the page.
+    // Plain .focus() scrolls the focused element into view -> jumps to top.
     var items = focusableInDrawer();
-    if (items.length) items[0].focus();
+    if (items.length) items[0].focus({ preventScroll: true });
   }
   function closeNav(returnFocus) {
     navList.classList.remove("open");

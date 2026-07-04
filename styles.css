@@ -426,24 +426,34 @@ a.contact-line:hover strong { color: var(--clay-600); }
 @media (max-width: 760px) {
   .nav-toggle { display: flex; }
   .main-nav { position: static; }
+
+  /* While the drawer is open the body is overflow:hidden, which cancels the
+     header's position:sticky (a clipping ancestor kills sticky). Pin the header
+     to the viewport so the close (X) button stays visible at ANY scroll pos. */
+  body.nav-open .site-header {
+    position: fixed; top: 0; left: 0; right: 0;
+  }
   .nav-list {
-    position: absolute; top: calc(100% + 8px); right: .9rem; left: .9rem;
-    flex-direction: column; align-items: stretch; gap: .1rem;
+    position: absolute; top: calc(100% + 10px); right: .9rem; left: .9rem;
+    flex-direction: column; align-items: stretch; gap: .35rem;
     background: var(--bone); border: 1px solid var(--line); border-radius: var(--radius);
     box-shadow: var(--shadow-lg);
-    padding: .75rem 1.1rem 1rem;
-    transform: translateY(-10px) scale(.98); transform-origin: top right;
+    padding: 1.1rem 1.25rem 1.35rem;
+    transform: translateY(-8px); transform-origin: top right;
     opacity: 0; pointer-events: none; visibility: hidden;
-    transition: opacity .28s var(--ease), transform .28s var(--ease), visibility 0s linear .28s;
+    transition: opacity .26s var(--ease), transform .26s var(--ease), visibility 0s linear .26s;
     z-index: 120; -webkit-tap-highlight-color: transparent; user-select: none;
   }
-  .nav-list.open { transform: none; opacity: 1; pointer-events: auto; visibility: visible; transition: opacity .28s var(--ease), transform .28s var(--ease); }
+  .nav-list.open { transform: none; opacity: 1; pointer-events: auto; visibility: visible; transition: opacity .26s var(--ease), transform .26s var(--ease); }
   .nav-list > li { border-bottom: 1px solid var(--line); }
   .nav-list > li:last-child { border-bottom: 0; }
-  .nav-list > li > a:not(.nav-cta):not(.nav-call) { display: block; padding: .85rem 1rem .85rem .5rem; font-size: 1.02rem; }
+  .nav-list > li > a:not(.nav-cta):not(.nav-call) {
+    display: flex; align-items: center; min-height: 52px;
+    padding: .55rem .75rem; font-size: 1.05rem;
+  }
   .nav-list > li > a:not(.nav-cta):not(.nav-call)::after { display: none; }
-  .nav-call { padding: .85rem 1rem .85rem .5rem; }
-  .nav-cta { text-align: center; margin: .55rem 0 0; padding: .8rem 1.15rem; }
+  .nav-call { display: flex; align-items: center; min-height: 52px; padding: .55rem .75rem; }
+  .nav-cta { text-align: center; margin: .7rem 0 0; padding: .95rem 1.15rem; min-height: 52px; display: flex; align-items: center; justify-content: center; }
 
   /* scrim behind the dropdown; tapping it closes the menu */
   .nav-scrim {
